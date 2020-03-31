@@ -11,6 +11,7 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.auth',
+    'django.contrib.messages',
     'django.contrib.admin',
     'django.contrib.sites',
     'django.contrib.staticfiles',
@@ -30,7 +31,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
 ]
-MIDDLEWARE_CLASSES = MIDDLEWARE  # Django < 1.10
 
 ROOT_URLCONF = 'test_project.urls'
 
@@ -55,6 +55,7 @@ TEMPLATES = [
 
 # Enable time-zone support
 USE_TZ = True
+TIME_ZONE = 'UTC'
 
 # Required for django-webtest to work
 STATIC_URL = '/static/'
