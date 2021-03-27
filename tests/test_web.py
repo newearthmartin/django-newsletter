@@ -9,13 +9,13 @@ from datetime import datetime, timedelta
 from django.core import mail
 from django.contrib.auth import get_user_model
 from django.utils import timezone
-from django.utils.encoding import force_text
+from django.utils.encoding import force_str
 from django.test.utils import override_settings
+from django.urls import reverse
 
 from newsletter.models import (
     Newsletter, Subscription, Submission, Message, get_default_sites
 )
-from newsletter.compat import reverse
 from newsletter.forms import UpdateForm
 
 from .utils import MailTestCase, UserTestCase, WebTestCase, ComparingTestCase
@@ -338,7 +338,7 @@ class SubscribeTestCase(WebTestCase, MailTestCase):
                     kwargs={'newsletter_slug': self.n.slug,
                             'action': 'unsubscribe'})
 
-        super(SubscribeTestCase, self).setUp()
+        super().setUp()
 
     def test_urls(self):
         # TODO: is performing this test in each subclass
@@ -458,7 +458,7 @@ class UserSubscribeTestCase(
 
         self.assertIn(
             'You are not subscribed to',
-            force_text(list(response.context['messages'])[0])
+            force_str(list(response.context['messages'])[0])
         )
 
     def test_unsubscribe_post(self):
@@ -1250,7 +1250,7 @@ class InvisibleAnonymousSubscribeTestCase(AnonymousSubscribeTestCase):
     """
 
     def setUp(self):
-        super_obj = super(InvisibleAnonymousSubscribeTestCase, self)
+        super_obj = super()
         super_obj.setUp()
 
         # Make newsletter invisible
@@ -1268,7 +1268,7 @@ class InvisibleUserSubscribeTestCase(UserSubscribeTestCase):
     """
 
     def setUp(self):
-        super_obj = super(InvisibleUserSubscribeTestCase, self)
+        super_obj = super()
         super_obj.setUp()
 
         # Make newsletter invisible
@@ -1420,7 +1420,7 @@ class ArchiveTestcase(NewsletterListTestCase):
         self.test_archive_detail()
 
 
-class ActionTemplateViewMixin(object):
+class ActionTemplateViewMixin:
     """ Mixin for testing requests to urls for all three actions. """
 
     def get_action_url(self, action):

@@ -2,12 +2,12 @@ from functools import update_wrapper
 
 from django.contrib.admin.utils import unquote
 from django.http import Http404
-from django.utils.encoding import force_text
+from django.utils.encoding import force_str
 from django.utils.translation import gettext as _
 from .models import Subscription
 
 
-class ExtendibleModelAdminMixin(object):
+class ExtendibleModelAdminMixin:
     def _getobj(self, request, object_id):
             opts = self.model._meta
 
@@ -25,8 +25,8 @@ class ExtendibleModelAdminMixin(object):
                         '%(name)s object with primary key '
                         '\'%(key)s\' does not exist.'
                     ) % {
-                        'name': force_text(opts.verbose_name),
-                        'key': force_text(object_id)
+                        'name': force_str(opts.verbose_name),
+                        'key': force_str(object_id)
                     }
                 )
 

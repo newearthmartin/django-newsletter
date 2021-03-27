@@ -7,20 +7,18 @@ from django.contrib import admin as django_admin
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Permission
 from django.test import TestCase
+from django.urls import reverse
 
 from newsletter import admin  # Triggers model admin registration
 from newsletter.admin_utils import make_subscription
-from newsletter.compat import reverse
 from newsletter.models import Message, Newsletter, Submission, Subscription, Attachment, attachment_upload_to
-
-from .utils import AssertLogsMixin
 
 test_files_dir = os.path.join(os.path.dirname(__file__), 'files')
 
 
-class AdminTestMixin(object):
+class AdminTestMixin:
     def setUp(self):
-        super(AdminTestMixin, self).setUp()
+        super().setUp()
 
         User = get_user_model()
         self.password = 'johnpassword'
@@ -42,7 +40,7 @@ class AdminTestMixin(object):
                                                     message=self.message_with_attachment)
 
 
-class AdminTestCase(AdminTestMixin, AssertLogsMixin, TestCase):
+class AdminTestCase(AdminTestMixin, TestCase):
     def admin_import_file(self, source_file, ignore_errors=''):
         """ Upload an address file for import to admin. """
 
@@ -349,7 +347,7 @@ class SubmissionAdminTests(AdminTestMixin, TestCase):
     """ Tests for Submission admin. """
 
     def setUp(self):
-        super(SubmissionAdminTests, self).setUp()
+        super().setUp()
 
         self.add_url = reverse('admin:newsletter_submission_add')
         self.changelist_url = reverse('admin:newsletter_submission_changelist')
@@ -456,7 +454,7 @@ class SubmissionAdminTests(AdminTestMixin, TestCase):
 
 
 class ArticleInlineTests(TestCase):
-    class MockSorlAdminImageMixin(object):
+    class MockSorlAdminImageMixin:
         def __init__(self):
             self.parent_class = 'sorl-thumbnail'
 

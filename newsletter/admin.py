@@ -1,12 +1,8 @@
-from __future__ import unicode_literals
-
 import logging
 
 from django.urls import path
 
 logger = logging.getLogger(__name__)
-
-import six
 
 from django.db import models
 
@@ -50,13 +46,13 @@ from .models import (
 )
 
 from django.utils.timezone import now
+from django.urls import reverse
 
 from .admin_forms import (
     SubmissionAdminForm, SubscriptionAdminForm, ImportForm, ConfirmForm,
     ArticleFormSet
 )
 from .admin_utils import ExtendibleModelAdminMixin, make_subscription
-from .compat import get_context, reverse
 from .fields import DynamicImageField
 from .settings import newsletter_settings
 
@@ -98,7 +94,7 @@ class NewsletterAdmin(admin.ModelAdmin):
     admin_submissions.short_description = ''
 
 
-class NewsletterAdminLinkMixin(object):
+class NewsletterAdminLinkMixin:
     def admin_newsletter(self, obj):
         opts = Newsletter._meta
         newsletter = obj.newsletter
@@ -192,7 +188,7 @@ class SubmissionAdmin(NewsletterAdminLinkMixin, ExtendibleModelAdminMixin,
 
     """ URLs """
     def get_urls(self):
-        urls = super(SubmissionAdmin, self).get_urls()
+        urls = super().get_urls()
 
         my_urls = [
             path(
@@ -240,7 +236,7 @@ if newsletter_settings.THUMBNAIL == 'sorl-thumbnail':
 else:
     ArticleInlineClassTuple = (StackedInline,)
 
-BaseArticleInline = type(str('BaseArticleInline'), ArticleInlineClassTuple, {})
+BaseArticleInline = type('BaseArticleInline', ArticleInlineClassTuple, {})
 
 class ArticleInline(BaseArticleInline):
     model = Article
@@ -314,12 +310,14 @@ class MessageAdmin(NewsletterAdminLinkMixin, ExtendibleModelAdminMixin,
                 'message belongs to.'
             ))
 
-        c = get_context({'message': message,
-                         'site': Site.objects.get_current(),
-                         'newsletter': message.newsletter,
-                         'date': now(),
-                         'STATIC_URL': settings.STATIC_URL,
-                         'MEDIA_URL': settings.MEDIA_URL})
+        c = {
+            'message': message,
+            'site': Site.objects.get_current(),
+            'newsletter': message.newsletter,
+            'date': now(),
+            'STATIC_URL': settings.STATIC_URL,
+            'MEDIA_URL': settings.MEDIA_URL
+        }
 
         return HttpResponse(message.html_template.render(c))
 
@@ -327,14 +325,14 @@ class MessageAdmin(NewsletterAdminLinkMixin, ExtendibleModelAdminMixin,
     def preview_text(self, request, object_id):
         message = self._getobj(request, object_id)
 
-        c = get_context({
+        c = {
             'message': message,
             'site': Site.objects.get_current(),
             'newsletter': message.newsletter,
             'date': now(),
             'STATIC_URL': settings.STATIC_URL,
             'MEDIA_URL': settings.MEDIA_URL
-        }, autoescape=False)
+        }
 
         return HttpResponse(
             message.text_template.render(c),
@@ -359,7 +357,7 @@ class MessageAdmin(NewsletterAdminLinkMixin, ExtendibleModelAdminMixin,
 
     """ URLs """
     def get_urls(self):
-        urls = super(MessageAdmin, self).get_urls()
+        urls = super().get_urls()
 
         my_urls = [
             path('<object_id>/preview/',
@@ -507,7 +505,7 @@ class SubscriptionAdmin(NewsletterAdminLinkMixin, ExtendibleModelAdminMixin,
             form = ConfirmForm(request.POST)
             if form.is_valid():
                 try:
-                    for email, name in six.iteritems(addresses):
+                    for email, name in addresses.items():
                         address_inst = make_subscription(
                             newsletter, email, name
                         )
@@ -540,7 +538,7 @@ class SubscriptionAdmin(NewsletterAdminLinkMixin, ExtendibleModelAdminMixin,
 
     """ URLs """
     def get_urls(self):
-        urls = super(SubscriptionAdmin, self).get_urls()
+        urls = super().get_urls()
 
         my_urls = [
             path('import/',
