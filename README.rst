@@ -5,6 +5,14 @@ django-newsletter
 .. image:: https://img.shields.io/pypi/v/django-newsletter.svg
     :target: https://pypi.python.org/pypi/django-newsletter
 
+.. image:: https://img.shields.io/pypi/pyversions/django-newsletter.svg
+    :target: https://pypi.org/project/django-newsletter/
+    :alt: Supported Python versions
+
+.. image:: https://img.shields.io/pypi/djversions/django-newsletter.svg
+    :target: https://pypi.org/project/django-newsletter/
+    :alt: Supported Django versions
+
 .. image:: https://github.com/jazzband/django-newsletter/workflows/Test/badge.svg
    :target: https://github.com/jazzband/django-newsletter/actions
    :alt: GitHub Actions
@@ -46,7 +54,7 @@ soon as near-full coverage is reached.
 
 Compatibility
 =============
-Currently, django-newsletter officially supports Django 2.2.x LTS, 3.0.x and 3.1.x and Python 3.5 through 3.8.
+Currently, django-newsletter officially supports Django 2.2.x LTS, 3.1.x and 3.2.x and Python 3.6 through 3.9.
 
 Requirements
 ============
