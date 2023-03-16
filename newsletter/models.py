@@ -601,7 +601,7 @@ class Submission(models.Model):
     @cached_property
     def extra_headers(self):
         return {
-            'List-Unsubscribe': 'http://%s%s' % (
+            'List-Unsubscribe': 'http://{}{}'.format(
                 Site.objects.get_current().domain,
                 reverse('newsletter_unsubscribe_request',
                         args=[self.message.newsletter.slug])
@@ -786,6 +786,6 @@ def get_address(name, email):
         name = name.replace('@', '') \
                    .replace(',', '') \
                    .replace(';', '')
-        return '%s <%s>' % (name, email)
+        return f'{name} <{email}>'
     else:
         return '%s' % email

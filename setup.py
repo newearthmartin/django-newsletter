@@ -55,6 +55,7 @@ setup(
     url='http://github.com/jazzband/django-newsletter/',
     packages=find_packages(exclude=("tests", "test_project")),
     include_package_data=True,
+    python_requires='>=3.7',
     classifiers=[
         'Development Status :: 6 - Mature',
         'Environment :: Web Environment',
@@ -67,11 +68,11 @@ setup(
         'Operating System :: OS Independent',
         'Programming Language :: Python',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
         'Programming Language :: Python :: 3.9',
         'Programming Language :: Python :: 3.10',
+        'Programming Language :: Python :: 3 :: Only',
         'Topic :: Utilities'
     ],
 )

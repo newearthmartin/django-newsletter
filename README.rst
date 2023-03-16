@@ -49,12 +49,12 @@ Strings have been fully translated to a lot of languages with many more on their
 .. image:: https://www.transifex.com/projects/p/django-newsletter/resource/django/chart/image_png
     :target: http://www.transifex.com/projects/p/django-newsletter/
 
-Contributions to translations are welcome through `Transifex <http://www.transifex.net/projects/p/django-newsletter/>`_. Strings will be included as
+Contributions to translations are welcome through `Transifex <http://www.transifex.com/projects/p/django-newsletter/>`_. Strings will be included as
 soon as near-full coverage is reached.
 
 Compatibility
 =============
-Currently, django-newsletter officially supports Django 2.2.x LTS, 3.1.x and 3.2.x and Python 3.6 through 3.9.
+Currently, django-newsletter officially supports Django 2.2.x LTS, 3.1.x and 3.2.x and Python 3.7 through 3.10.
 
 Requirements
 ============
