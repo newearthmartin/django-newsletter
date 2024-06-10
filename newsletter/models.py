@@ -103,16 +103,12 @@ class Newsletter(models.Model):
 
     def get_subscription_generator(self):
         if self.subscription_generator_class:
-            try:
-                if "." not in self.subscription_generator_class:
-                    raise ModuleNotFoundError("missing module for subscription generator class")
-                module_name, class_name = self.subscription_generator_class.rsplit(".", 1)
-                module = importlib.import_module(module_name)
-                self.subscription_generator = getattr(module, class_name)()
-                return self.subscription_generator
-            except (AttributeError, ModuleNotFoundError) as e:
-                logger.error(f"Could not load subscriber generator class '%s' - %s" % (self.subscription_generator_class, e))
-                raise e
+            if "." not in self.subscription_generator_class:
+                raise ModuleNotFoundError("missing module for subscription generator class")
+            module_name, class_name = self.subscription_generator_class.rsplit(".", 1)
+            module = importlib.import_module(module_name)
+            self.subscription_generator = getattr(module, class_name)()
+            return self.subscription_generator
         else:
             return None
 
