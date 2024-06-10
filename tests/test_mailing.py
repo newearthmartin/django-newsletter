@@ -173,11 +173,11 @@ class CreateSubmissionTestCase(MailingTestCase):
 
 
 class TestingSubscriptionGenerator(SubscriptionGenerator):
-    def generate_subscriptions(self, submission, subscriptions):
+    def generate_subscriptions(self, submission):
         return [
-            Subscription(name_field='name1', email_field='test1@test.com'),
-            Subscription(name_field='name2', email_field='test2@test.com'),
-            Subscription(name_field='name3', email_field='test3@test.com')
+            Subscription(newsletter=submission.newsletter, name_field='name 2', email_field='test2@test.com'),
+            Subscription(newsletter=submission.newsletter, name_field='name 3', email_field='test3@test.com'),
+            Subscription(newsletter=submission.newsletter, name_field='name 4', email_field='test4@test.com'),
         ]
 
 
@@ -191,22 +191,37 @@ class SubscriptionGeneratorTestCase(MailingTestCase):
 
     def test_subscription_generator(self):
         """ Test the dynamic generation of subscriptors """
+        # Manually add some subscriptions, including an unsubscription
+        Subscription.objects.filter(newsletter=self.n).delete()
+        sub1 = Subscription.objects.create(name='name 1', email='test1@test.com', newsletter=self.n, subscribed=True)
+        sub2 = Subscription.objects.create(name='name 2', email='test2@test.com', newsletter=self.n, subscribed=True)
+        sub3 = Subscription.objects.create(name='name 3', email='test3@test.com', newsletter=self.n, unsubscribed=True)
+        self.sub.subscriptions.add(sub1)
+        self.sub.subscriptions.add(sub2)
+        self.sub.subscriptions.add(sub3)
+
         self.sub.submit()
         Submission.submit_queue()
         submission = Submission.objects.get(pk=self.sub.pk)
         self.assertTrue(submission.sent)
-        self.assertEqual(len(mail.outbox), 3)
+        self.assertEquals(len(mail.outbox), 3)
 
     def test_non_existent_generator_class(self):
         """ Test failure when generator class does not exist """
-        self.n.subscription_generator_class = 'module.does.not.Exist'
-        self.n.save()
         try:
-            self.sub.submit()
-            self.fail('Should not have been able to send')
-        except (AttributeError, ModuleNotFoundError):
+            self.n.subscription_generator_class = 'nonexistent_module.SomeClass'
+            self.n.save()
+            self.fail('Should not reach this')
+        except ModuleNotFoundError:
             pass
-        
+
+        try:
+            self.n.subscription_generator_class = 'newsletter.models.NonexistentClass'
+            self.n.save()
+            self.fail('Should not reach this')
+        except AttributeError:
+            pass
+
 
 class SubmitSubmissionTestCase(MailingTestCase):
     def setUp(self):
