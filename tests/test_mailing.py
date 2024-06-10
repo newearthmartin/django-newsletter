@@ -206,7 +206,7 @@ class SubscriptionGeneratorTestCase(MailingTestCase):
         self.assertTrue(submission.sent)
         self.assertEquals(len(mail.outbox), 3)
 
-    def test_non_existent_generator_class(self):
+    def test_nonexistent_generator_class(self):
         """ Test failure when generator class does not exist """
         try:
             self.n.subscription_generator_class = 'nonexistent_module.SomeClass'
