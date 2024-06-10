@@ -204,7 +204,7 @@ class SubscriptionGeneratorTestCase(MailingTestCase):
         Submission.submit_queue()
         submission = Submission.objects.get(pk=self.sub.pk)
         self.assertTrue(submission.sent)
-        self.assertEquals(len(mail.outbox), 3)
+        self.assertEqual(len(mail.outbox), 3)
 
     def test_nonexistent_generator_class(self):
         """ Test failure when generator class does not exist """
