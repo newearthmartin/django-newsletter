@@ -47,6 +47,7 @@ class Newsletter(models.Model):
     )
 
     subscription_generator_class = models.CharField(max_length=200, blank=True, null=True)
+    enable_unsubscribe = models.BooleanField(default=True)
 
     visible = models.BooleanField(
         default=True, verbose_name=_('visible'), db_index=True
