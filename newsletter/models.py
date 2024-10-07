@@ -792,7 +792,8 @@ def get_address(name, email):
     if name:
         name = name.replace('@', '') \
                    .replace(',', '') \
-                   .replace(';', '')
+                   .replace(';', '') \
+                   .replace(':', '')
         return f'{name} <{email}>'
     else:
         return '%s' % email
