@@ -412,6 +412,8 @@ class Article(models.Model):
         upload_to='newsletter/images/%Y/%m/%d', blank=True, null=True,
         verbose_name=_('image')
     )
+    image_width = models.IntegerField(null=True, blank=True, verbose_name=_('image width'))
+    image_height = models.IntegerField(null=True, blank=True, verbose_name=_('image height'))
 
     # Message this article is associated with
     # TODO: Refactor post to message (post is legacy notation).
