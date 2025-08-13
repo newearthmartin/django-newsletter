@@ -8,7 +8,7 @@ import django
 from django.conf import settings
 from django.contrib.sites.models import Site
 from django.contrib.sites.managers import CurrentSiteManager
-from django.core.mail import EmailMultiAlternatives
+from django.core.mail import EmailMultiAlternatives, get_connection
 from django.db import models
 from django.template.loader import select_template
 from django.utils.functional import cached_property
@@ -586,20 +586,35 @@ class Submission(models.Model):
         self.save()
 
         try:
-            for idx, subscription in enumerate(subscriptions, start=1):
-                if hasattr(settings, 'NEWSLETTER_EMAIL_DELAY'):
-                    time.sleep(settings.NEWSLETTER_EMAIL_DELAY)
-                if hasattr(settings, 'NEWSLETTER_BATCH_SIZE') and settings.NEWSLETTER_BATCH_SIZE > 0:
-                    if idx % settings.NEWSLETTER_BATCH_SIZE == 0:
-                        time.sleep(settings.NEWSLETTER_BATCH_DELAY)
-                self.send_message(subscription)
+            messages = [(subscription, self.get_email_message(subscription)) for subscription in subscriptions]
+
+            email_delay = getattr(settings, 'NEWSLETTER_EMAIL_DELAY', 0)
+            batch_delay = getattr(settings, 'NEWSLETTER_BATCH_DELAY', 0)
+            batch_size = getattr(settings, 'NEWSLETTER_BATCH_SIZE', 0)
+            if batch_size == 0:
+                batch_size = len(messages)
+
+            while messages:
+                batch = messages[:batch_size]
+                messages = messages[batch_size:]
+
+                if email_delay == 0:
+                    Submission.send_messages(batch)
+                else:
+                    for i, (subscription, message) in enumerate(batch):
+                        if i > 0:
+                            time.sleep(email_delay)
+                        Submission.send_messages([(subscription, message)])
+
+                if len(messages) > 0 and batch_delay > 0:
+                    time.sleep(batch_delay)
             self.sent = True
 
         finally:
             self.sending = False
             self.save()
 
-    def send_message(self, subscription):
+    def get_email_message(self, subscription):
         variable_dict = {
             'subscription': subscription,
             'site': Site.objects.get_current(),
@@ -633,22 +648,17 @@ class Submission(models.Model):
                 "text/html"
             )
 
+        return message
+
+    @classmethod
+    def send_messages(cls, messages):
+        logger.debug(gettext('Submitting %d messages.'), len(messages))
+        for subscription, _ in messages:
+            logger.debug(gettext('Submitting message to: %s.'), subscription)
         try:
-            logger.debug(
-                gettext('Submitting message to: %s.'),
-                subscription
-            )
-
-            message.send()
-
+            get_connection().send_messages([message for _, message in messages])
         except Exception as e:
-            # TODO: Test coverage for this branch.
-            logger.error(
-                gettext('Message %(subscription)s failed '
-                        'with error: %(error)s'),
-                {'subscription': subscription,
-                 'error': e}
-            )
+            logger.error(gettext('Batch failed with error: %s'), e)
 
     @classmethod
     def submit_queue(cls):
