@@ -40,6 +40,8 @@ class Newsletter(models.Model):
         max_length=200, verbose_name=_('sender'), help_text=_('Sender name')
     )
 
+    enable_unsubscribe = models.BooleanField(default=True)
+
     visible = models.BooleanField(
         default=True, verbose_name=_('visible'), db_index=True
     )
