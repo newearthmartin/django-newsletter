@@ -6,7 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('newsletter', '0009_alter_article_id_alter_attachment_id_and_more'),
+        ('newsletter', '0010_article_image_thumbnail_width'),
     ]
 
     operations = [
