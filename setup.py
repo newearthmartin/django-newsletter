@@ -44,12 +44,12 @@ setup(
     long_description=README,
     install_requires=[
         "Django>=4.2",
-        "python-card-me<1.0",
-        "python-ldap",
         "chardet",
-        "unicodecsv<0.15",
         "Pillow",
     ],
+    extras_require={
+        "test": ["python-ldap", "unicodecsv", "python-card-me"],
+    },
     author='Mathijs de Bruin',
     author_email='mathijs@mathijsfietst.nl',
     url='http://github.com/jazzband/django-newsletter/',

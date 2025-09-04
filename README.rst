@@ -58,8 +58,16 @@ Currently, django-newsletter officially supports Django 4.2.x LTS, 5.0.x and 5.1
 
 Requirements
 ============
-Please refer to `requirements.txt <http://github.com/jazzband/django-newsletter/blob/master/requirements.txt>`_
+Please refer to `setup.py <http://github.com/jazzband/django-newsletter/blob/master/setup.py>`_
 for an updated list of required packages.
+
+Also you need to install one of either
+`sorl-thumbnail` or `easy-thumbnails` depending on which thumbnail engine you want to use.
+
+Additional dependencies you must install
+ - `python-ldap`: for importing ldif files
+ - `unicodecsv`: for importing csv files
+ - `python-card-me`: for importing vCard files
 
 Tests
 ==========
