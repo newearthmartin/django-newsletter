@@ -3,6 +3,7 @@ Changes
 
 Unreleased
 ----------
+- Add app_name to urls.py (breaking change - check urls in templates)
 - Dynamic subscription generation
 - Add multi-site capability (#266)
 - Add option to enable/disable unsubscribe in Newsletter
