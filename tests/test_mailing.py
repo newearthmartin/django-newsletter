@@ -132,7 +132,7 @@ class ArticleTestCase(MailingTestCase):
         self.assertRegex(html, image_below_regex)
 
     @modify_settings(INSTALLED_APPS={'append': 'easy_thumbnails', 'remove': 'sorl.thumbnail'})
-    @override_settings(NEWSLETTER_THUMBNAIL='easy-thumbnails')
+    @override_settings(NEWSLETTER_THUMBNAIL='easy-thumbnails', THUMBNAIL_DEBUG=True)
     def test_image_thumbnail_easy(self):
         a = self.make_article()
         a.image = os.path.join('tests', 'files', 'sample.jpg')

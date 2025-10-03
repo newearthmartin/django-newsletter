@@ -1,2 +1,7 @@
 {% load easy_thumbnails_tags  %}
+
+article: {{article}}
+article.image: {{article.image}}
+article.image_thumbnail_size: {{article.image_thumbnail_size}}
+
 <img src="{{ site_url }}{% thumbnail article.image article.image_thumbnail_size %}">
