@@ -11,7 +11,7 @@ from django.contrib.sites.models import Site
 from django.core import mail
 from django.core.exceptions import ValidationError
 from django.utils.timezone import now
-from django.test.utils import override_settings
+from django.test.utils import override_settings, modify_settings
 
 from newsletter.models import (
     Newsletter, Subscription, Submission, Message, Article, Attachment, SubscriptionGenerator,
@@ -130,6 +130,22 @@ class ArticleTestCase(MailingTestCase):
         self.assertIn('width="400" height="300"', html)
         self.assertNotRegex(html, image_above_regex)
         self.assertRegex(html, image_below_regex)
+
+    @modify_settings(INSTALLED_APPS={'append': 'easy_thumbnails', 'remove': 'sorl.thumbnail'})
+    @override_settings(NEWSLETTER_THUMBNAIL='easy-thumbnails')
+    def test_image_thumbnail_easy(self):
+        a = self.make_article()
+        a.image = os.path.join('tests', 'files', 'sample.jpg')
+        a.save()
+        _, _, html = render_message(self.m)
+        self.assertEqual(a.image_thumbnail_size(), '200x200')
+        self.assertIn('src="https://example.com/tests/files/sample.jpg.200x200_q85.jpg"', html)
+
+        a.image_thumbnail_width = 400
+        a.save()
+        _, _, html = render_message(self.m)
+        self.assertEqual(a.image_thumbnail_size(), '400x300')
+        self.assertIn('src="https://example.com/tests/files/sample.jpg.400x300_q85.jpg"', html)
 
     @override_settings(NEWSLETTER_USE_HTTPS=False)
     def test_http(self):
