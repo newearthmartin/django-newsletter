@@ -39,6 +39,8 @@ dependencies = [
 [project.optional-dependencies]
 test = [
   "python-ldap",
+  "sorl-thumbnail",
+  "easy-thumbnails",
   "unicodecsv",
   "python-card-me",
   "django-tinymce",

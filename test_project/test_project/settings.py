@@ -21,6 +21,7 @@ INSTALLED_APPS = [
     'tinymce',
     'newsletter',
     'sorl.thumbnail',
+    'easy_thumbnails',
 ]
 
 # Imperavi is not compatible with Django 1.9+
