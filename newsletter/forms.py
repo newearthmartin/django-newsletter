@@ -3,7 +3,7 @@ from django.forms.utils import ValidationError
 from django.utils.translation import gettext_lazy as _
 
 from .models import Subscription
-from .validators import validate_email_nouser
+from .validators import validate_email_no_user
 
 
 class NewsletterForm(forms.ModelForm):
@@ -41,7 +41,7 @@ class SubscribeRequestForm(NewsletterForm):
     """
 
     email_field = forms.EmailField(
-        label=_("e-mail"), validators=[validate_email_nouser]
+        label=_("e-mail"), validators=[validate_email_no_user]
     )
 
     def clean_email_field(self):
@@ -76,7 +76,7 @@ class UpdateRequestForm(NewsletterForm):
     """
 
     email_field = forms.EmailField(
-        label=_("e-mail"), validators=[validate_email_nouser]
+        label=_("e-mail"), validators=[validate_email_no_user]
     )
 
     class Meta(NewsletterForm.Meta):
@@ -136,7 +136,7 @@ class UpdateForm(NewsletterForm):
     """
 
     email_field = forms.EmailField(
-        label=_("e-mail"), validators=[validate_email_nouser], disabled=True
+        label=_("e-mail"), validators=[validate_email_no_user], disabled=True
     )
 
     def clean_user_activation_code(self):

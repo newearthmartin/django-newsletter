@@ -73,7 +73,7 @@ class NewsletterSettings(Settings):
 
     DEFAULT_CONFIRM_EMAIL = True
     DEFAULT_THUMBNAIL_QUALITY = 95
-    DEFAULT_VALIDATE_USER = True
+    DEFAULT_VALIDATE_NO_USER = True
 
     @property
     def DEFAULT_CONFIRM_EMAIL_SUBSCRIBE(self):
@@ -154,15 +154,15 @@ class NewsletterSettings(Settings):
         return use_https
 
     @property
-    def VALIDATE_USER(self):
-        validate_user = getattr(
-            django_settings, "NEWSLETTER_VALIDATE_USER", None
+    def VALIDATE_NO_USER(self):
+        validate_no_user = getattr(
+            django_settings, "NEWSLETTER_VALIDATE_NO_USER", None
         )
 
-        if validate_user is None:
-            return self.DEFAULT_VALIDATE_USER
+        if validate_no_user is None:
+            return self.DEFAULT_VALIDATE_NO_USER
 
-        return validate_user
+        return validate_no_user
 
 
 newsletter_settings = NewsletterSettings()

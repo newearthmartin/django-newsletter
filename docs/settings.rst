@@ -54,15 +54,15 @@ overridden for each of subscribe, unsubscribe and update actions, by adding
 ``NEWSLETTER_CONFIRM_EMAIL_UNSUBSCRIBE`` and/or
 ``NEWSLETTER_CONFIRM_EMAIL_UPDATE`` set to ``True`` or ``False``.
 
-Disabling the existing-user validation
---------------------------------------
+Disabling the no-user validation
+--------------------------------
 Disable checking for existing users for the provided email address.
 
 By default, the subscribe/update/unsubscribe forms will reject email addresses
 that belong to a registered user, asking the visitor to login instead. If you
 want to bypass this check, add to ``settings.py``::
 
-    NEWSLETTER_VALIDATE_USER = False
+    NEWSLETTER_VALIDATE_NO_USER = False
 
 Defaults to ``True``.
 

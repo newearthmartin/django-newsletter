@@ -5,17 +5,17 @@ from django.utils.translation import gettext_lazy as _
 from newsletter.settings import newsletter_settings
 
 
-def validate_email_nouser(email):
+def validate_email_no_user(email):
     """
     Check if the email address does not belong to an existing user.
     """
-    if not newsletter_settings.VALIDATE_USER:
+    if not newsletter_settings.VALIDATE_NO_USER:
         return
 
     # Check whether we should be subscribed to as a user
     User = get_user_model()
 
-    if User.objects.filter(email__iexact=email).exists():
+    if User.objects.filter(email__exact=email).exists():
         raise ValidationError(_(
             "The e-mail address '%(email)s' belongs to a user with an "
             "account on this site. Please log in as that user "
