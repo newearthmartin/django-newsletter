@@ -44,7 +44,7 @@ Disable email confirmation for subscribe, unsubscribe and update actions for sub
 By default subscribe, unsubscribe and update requests made by a user who is
 not logged in need to be confirmed by clicking on an activation link in an
 email. If you want all requested actions to be performed without email
-confirmation, add following line to settings.py::
+confirmation, add following line to ``settings.py``::
 
     NEWSLETTER_CONFIRM_EMAIL = False
 
@@ -53,6 +53,18 @@ overridden for each of subscribe, unsubscribe and update actions, by adding
 ``NEWSLETTER_CONFIRM_EMAIL_SUBSCRIBE`` and/or
 ``NEWSLETTER_CONFIRM_EMAIL_UNSUBSCRIBE`` and/or
 ``NEWSLETTER_CONFIRM_EMAIL_UPDATE`` set to ``True`` or ``False``.
+
+Disabling the existing-user validation
+--------------------------------------
+Disable checking for existing users for the provided email address.
+
+By default, the subscribe/update/unsubscribe forms will reject email addresses
+that belong to a registered user, asking the visitor to login instead. If you
+want to bypass this check, add to ``settings.py``::
+
+    NEWSLETTER_VALIDATE_USER = False
+
+Defaults to ``True``.
 
 Configure rich text widget
 --------------------------
