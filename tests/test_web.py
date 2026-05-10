@@ -500,6 +500,34 @@ class UserSubscribeTestCase(
         )
         self.assertNotContains(response, 'id="id_submit"')
 
+    def test_unsubscribe_generator(self):
+        # User has no Subscription row but matches a generator entry.
+        self.user.email = 'test2@test.com'
+        self.user.save()
+
+        # Without a generator: not subscribed.
+        response = self.client.get(self.unsubscribe_url)
+        self.assertIn(
+            'You are not subscribed to',
+            force_str(list(response.context['messages'])[0])
+        )
+        self.assertFalse(
+            Subscription.objects.filter(newsletter=self.n, user=self.user).exists()
+        )
+
+        # With a generator: confirming unsubscribe creates a row and unsubscribes it.
+        self.n.subscription_generator_class = (
+            'tests.test_mailing.TestingSubscriptionGenerator'
+        )
+        self.n.save()
+
+        response = self.client.post(self.unsubscribe_confirm_url)
+        self.assertContains(response, self.n.title, status_code=200)
+
+        subscription = self.get_user_subscription()
+        self.assertFalse(subscription.subscribed)
+        self.assertTrue(subscription.unsubscribed)
+
 
 class AnonymousSubscribeTestCase(
     SubscribeTestCase,

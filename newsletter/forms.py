@@ -103,13 +103,7 @@ class UpdateRequestForm(NewsletterForm):
             )
 
         except Subscription.DoesNotExist:
-            instance = None
-            if generator := newsletter.get_subscription_generator():
-                subscriptions = generator.generate_subscriptions(newsletter)
-                subscription = next((s for s in subscriptions if data == s[1]), None)
-                if subscription:
-                    instance = Subscription(newsletter=newsletter, email=data, name=subscription[0], subscribed=True)
-                    instance.save()
+            instance = newsletter.create_subscription_from_generator(data)
             if instance:
                 self.instance = instance
             else:

@@ -349,7 +349,14 @@ class UnsubscribeUserView(ActionUserView):
             instance = Subscription.objects.get(
                 newsletter=self.newsletter, user=request.user
             )
+        except Subscription.DoesNotExist:
+            instance = self.newsletter.create_subscription_from_generator(
+                request.user.email, user=request.user
+            )
+            if not instance:
+                not_subscribed = True
 
+        if instance is not None:
             if not instance.subscribed:
                 not_subscribed = True
             elif self.confirm:
@@ -368,9 +375,6 @@ class UnsubscribeUserView(ActionUserView):
                         "my_newsletter": self.newsletter
                     }
                 )
-
-        except Subscription.DoesNotExist:
-            not_subscribed = True
 
         if not_subscribed:
             messages.info(

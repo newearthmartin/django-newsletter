@@ -116,6 +116,23 @@ class Newsletter(models.Model):
         else:
             return None
 
+    def create_subscription_from_generator(self, email, user=None):
+        """
+        Creates a Subscription if `email` is among the generator's recipients, else returns None
+        """
+        generator = self.get_subscription_generator()
+        if not generator:
+            return None
+        match = next((entry for entry in generator.generate_subscriptions(self) if entry[1] == email), None)
+        if not match:
+            return None
+        if user:
+            subscription = Subscription(newsletter=self, user=user, subscribed=True)
+        else:
+            subscription = Subscription(newsletter=self, email=email, name=match[0], subscribed=True)
+        subscription.save()
+        return subscription
+
     def __str__(self):
         return self.title
 
